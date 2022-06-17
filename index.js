@@ -14,7 +14,7 @@ form.onsubmit = (event) => {
             error.push('error')
         } 
     })
-    error.length === 0 ? submit() : console.log('А хулиган! Тестируйте мой код?')
+    error.length === 0 ? submit() : console.log('Fill the missed fields!')
 }
 // The info
 function submit() {
@@ -55,10 +55,59 @@ function showMyTask (taskInfo) {
         cardHeading.append(h4, remove)
         cardBottom.append(spanTime)
         // Events
+        // Elements which would be clicked to open the modal window
+        let modals = document.querySelectorAll('.modal2Open')
+        // Elements which would be clicked to close the modal window
+        let btnsCloser = document.querySelectorAll('.toClose')
+        // Span which would be shown to user as the current name
+        let currentName = document.querySelector('.name')
+        // Input to change the name
+        let name2Change = document.querySelector('.currentName')
+        // Function to remove the card box
         remove.onclick = () => {
             let idx = taskInfo.indexOf(info)
             taskInfo.splice(idx, 1)
+            // The error with opening the modal has been solved
+            toClose(modals)
             showMyTask(taskInfo)
         }
+        // Function to open the modal of name changer
+        cardBox.onclick = () => {
+            modals.forEach(modal => {
+                toOpen(modal)
+            })
+            // The current name parameters
+            currentName.innerHTML = info.title.toUpperCase()
+            name2Change.value = info.title
+        }
+        // The name changes after closing the modal window
+        btnsCloser.forEach(btn => {
+            btn.onclick = () => {
+                toClose(modals)
+                info.title = name2Change.value 
+                showMyTask(taskInfo)
+            }
+        })
     }
+}
+showMyTask(tasks)
+// Function to open the modal window
+function toOpen (modal) {
+    if (modal.classList.contains('modal__bg')) {
+        modal.style.display = 'block'
+    } else {
+        modal.style.display = 'flex'
+    }
+    setTimeout(() => {
+        modal.style.opacity = '1'
+    }, 300);
+}
+// Function to close the modal window
+function toClose(closes) {
+    closes.forEach(close => {
+        close.style.opacity = '0'
+        setTimeout(() => {
+            close.style.display = 'none'
+        }, 300);
+    })
 }
